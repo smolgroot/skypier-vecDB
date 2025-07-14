@@ -1,4 +1,4 @@
-# SkyPier VecDB
+# Skypier VecDB
 
 A high-performance, decentralized minimal vector database written in Rust for AI infrastructure. Built from the ground up for distributed environments.
 

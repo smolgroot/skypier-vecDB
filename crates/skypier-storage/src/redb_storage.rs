@@ -187,4 +187,26 @@ impl Storage for RedbStorage {
 
         Ok(vectors)
     }
+
+    async fn get_first_vector(&self) -> Result<Option<Vector>> {
+        let db = Arc::clone(&self.db);
+        
+        let first_vector = task::spawn_blocking(move || {
+            let read_txn = db.begin_read()?;
+            let table = read_txn.open_table(VECTORS_TABLE)?;
+            
+            let mut iter = table.iter()?;
+            let result = if let Some(first) = iter.next() {
+                let (_, value) = first?;
+                let vector_data = value.value();
+                let vector: Vector = serde_json::from_slice(vector_data)?;
+                Some(vector)
+            } else {
+                None
+            };
+            Ok::<Option<Vector>, anyhow::Error>(result)
+        }).await??;
+
+        Ok(first_vector)
+    }
 }

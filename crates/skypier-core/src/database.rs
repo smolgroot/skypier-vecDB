@@ -127,9 +127,23 @@ impl VectorDatabase {
         let total_vectors = self.storage.count_vectors().await?;
         let storage_size = self.storage.size_bytes().await?;
         
+        // Calculate dimensions from stored vectors if not set
+        let dimensions = if let Some(dims) = self.dimensions {
+            dims
+        } else if total_vectors > 0 {
+            // Get the first vector to determine dimensions
+            if let Some(first_vector) = self.storage.get_first_vector().await? {
+                first_vector.dimensions()
+            } else {
+                0
+            }
+        } else {
+            0
+        };
+        
         Ok(DatabaseStats {
             total_vectors,
-            dimensions: self.dimensions.unwrap_or(0),
+            dimensions,
             storage_size_bytes: storage_size,
         })
     }
