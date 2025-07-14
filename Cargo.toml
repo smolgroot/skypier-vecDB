@@ -54,7 +54,7 @@ skypier-network = { path = "crates/skypier-network" }
 skypier-index = { path = "crates/skypier-index" }
 
 [dev-dependencies]
-axum-test = "15.0"
+axum-test = "17.3"
 tempfile = "3.8"
 tokio-test = "0.4"
 criterion = { version = "0.5", features = ["html_reports"] }
