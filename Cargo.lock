@@ -994,9 +994,9 @@ dependencies = [
 
 [[package]]
 name = "faiss"
-version = "0.11.0"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81a02c4542e302d6f19aaa139bfae294827cb8193cf8f90dbb83488d2fcdf60a"
+checksum = "b3ffe048432786028b0a30aa1d13e10e08ced380439ba4a83fe5c227d2dd9733"
 dependencies = [
  "faiss-sys",
 ]
