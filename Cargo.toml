@@ -41,7 +41,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 anyhow = "1.0"
 thiserror = "1.0"
 clap = { version = "4.0", features = ["derive"] }
-config = "0.14"
+config = "0.15"
 
 # Cryptography
 sha2 = "0.10"
