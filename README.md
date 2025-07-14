@@ -1,12 +1,10 @@
-# SkyPier VecDB
-
-A high-performance, decentralized minimal vector database written in Rust for AI infrastructure. Built from the ground up for distributed environments.
+# Skypier VecDB
 
 [![CI](https://github.com/smolgroot/skypier-vecdb/workflows/CI/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
-[![Coverage](https://codecov.io/gh/user/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/user/skypier-vecdb)
+[![Coverage](https://codecov.io/gh/smolgroot/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/smolgroot/skypier-vecdb)
 [![Security Audit](https://github.com/smolgroot/skypier-vecdb/workflows/Security%20Audit/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
 [![Crates.io](https://img.shields.io/crates/v/skypier-vecdb.svg)](https://crates.io/crates/skypier-vecdb)
-[![Documentation](https://docs.rs/skypier-vecdb/badge.svg)](https://docs.rs/skypier-vecdb)kypier VecDB
+[![Documentation](https://docs.rs/skypier-vecdb/badge.svg)](https://docs.rs/skypier-vecdb)
 
 A high-performance, decentralized minimal vector database written in Rust for AI infrastructure. Built from the ground up for distributed environments.
 
@@ -185,5 +183,5 @@ This project uses GitHub Actions for CI/CD:
 - **Release Automation**: Creates releases with binaries for multiple platforms
 
 [![CI](https://github.com/smolgroot/skypier-vecdb/workflows/CI/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
-[![Coverage](https://codecov.io/gh/user/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/user/skypier-vecdb)
+[![Coverage](https://codecov.io/gh/smolgroot/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/smolgroot/skypier-vecdb)
 ````
