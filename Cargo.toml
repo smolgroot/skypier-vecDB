@@ -57,7 +57,7 @@ skypier-index = { path = "crates/skypier-index" }
 axum-test = "15.0"
 tempfile = "3.8"
 tokio-test = "0.4"
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.6", features = ["html_reports"] }
 
 [features]
 default = ["embedded"]
