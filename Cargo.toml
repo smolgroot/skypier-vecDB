@@ -1,0 +1,66 @@
+[package]
+name = "skypier-vecdb"
+version = "0.1.0"
+edition = "2021"
+authors = ["SkyPier Team"]
+description = "A decentralized minimal vector database for AI infrastructure"
+license = "MIT"
+repository = "https://github.com/user/skypier-vecdb"
+
+[workspace]
+members = ["crates/*"]
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+
+# Web framework
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# P2P networking
+libp2p = { version = "0.55", features = ["tcp", "noise", "yamux", "gossipsub", "mdns", "kad", "request-response", "identify"] }
+
+# Storage
+redb = "2.0"
+
+# Vector operations (removed candle-core due to dependency conflicts)
+# candle-core = "0.6"
+# candle-nn = "0.6"
+faiss = { version = "0.11", optional = true }
+
+# Utilities
+uuid = { version = "1.0", features = ["v4", "serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1.0"
+thiserror = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+config = "0.14"
+
+# Cryptography
+sha2 = "0.10"
+blake3 = "1.5"
+
+# Workspace dependencies
+skypier-core = { path = "crates/skypier-core" }
+skypier-storage = { path = "crates/skypier-storage" }
+skypier-network = { path = "crates/skypier-network" }
+skypier-index = { path = "crates/skypier-index" }
+
+[dev-dependencies]
+tempfile = "3.0"
+
+[features]
+default = ["embedded"]
+embedded = []
+faiss-backend = ["faiss"]
+
+[[bin]]
+name = "skypier-vecdb"
+path = "src/main.rs"
