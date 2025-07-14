@@ -3062,7 +3062,7 @@ dependencies = [
  "skypier-network",
  "skypier-storage",
  "tempfile",
- "thiserror 1.0.69",
+ "thiserror 2.0.12",
  "tokio",
  "tokio-test",
  "tower 0.4.13",
