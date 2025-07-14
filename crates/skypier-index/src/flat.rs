@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::collections::HashMap;
 
-use crate::{VectorIndex, SearchResult};
+use crate::{SearchResult, VectorIndex};
 
 pub struct FlatIndex {
     vectors: HashMap<String, Vec<f32>>,
@@ -51,11 +51,15 @@ impl VectorIndex for FlatIndex {
             .collect();
 
         // Sort by score (descending)
-        results.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal));
-        
+        results.sort_by(|a, b| {
+            b.score
+                .partial_cmp(&a.score)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
+
         // Take top k
         results.truncate(k);
-        
+
         Ok(results)
     }
 

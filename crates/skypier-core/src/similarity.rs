@@ -1,4 +1,4 @@
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 
 pub fn cosine_similarity(a: &[f32], b: &[f32]) -> Result<f32> {
     if a.len() != b.len() {

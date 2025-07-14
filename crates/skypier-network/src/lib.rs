@@ -1,11 +1,11 @@
 use anyhow::Result;
 
-pub mod p2p_node;
 pub mod consensus;
+pub mod p2p_node;
 pub mod replication;
 
-pub use p2p_node::P2PNode;
 pub use consensus::ConsensusEngine;
+pub use p2p_node::P2PNode;
 pub use replication::ReplicationManager;
 
 #[derive(Debug, Clone)]

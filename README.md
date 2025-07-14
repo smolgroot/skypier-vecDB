@@ -1,4 +1,12 @@
-# Skypier VecDB
+# SkyPier VecDB
+
+A high-performance, decentralized minimal vector database written in Rust for AI infrastructure. Built from the ground up for distributed environments.
+
+[![CI](https://github.com/smolgroot/skypier-vecdb/workflows/CI/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
+[![Coverage](https://codecov.io/gh/user/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/user/skypier-vecdb)
+[![Security Audit](https://github.com/smolgroot/skypier-vecdb/workflows/Security%20Audit/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
+[![Crates.io](https://img.shields.io/crates/v/skypier-vecdb.svg)](https://crates.io/crates/skypier-vecdb)
+[![Documentation](https://docs.rs/skypier-vecdb/badge.svg)](https://docs.rs/skypier-vecdb)kypier VecDB
 
 A high-performance, decentralized minimal vector database written in Rust for AI infrastructure. Built from the ground up for distributed environments.
 
@@ -18,18 +26,18 @@ A high-performance, decentralized minimal vector database written in Rust for AI
 ┌─────────────────────────────────────────────────────────────┐
 │                     SkyPier VecDB                           │
 ├─────────────────────────────────────────────────────────────┤
-│  REST API (Axum)           │  P2P Network (libp2p)         │
-│  - Insert vectors          │  - Gossipsub messaging        │
-│  - Search similarity       │  - Kademlia DHT               │
-│  - Manage collections      │  - mDNS discovery             │
+│  REST API (Axum)           │  P2P Network (libp2p)          │
+│  - Insert vectors          │  - Gossipsub messaging         │
+│  - Search similarity       │  - Kademlia DHT                │
+│  - Manage collections      │  - mDNS discovery              │
 ├─────────────────────────────────────────────────────────────┤
-│  Core Database Engine                                       │
-│  - Vector operations       │  - HNSW Index                 │
-│  - Similarity computation  │  - Flat index fallback        │
+│  Core Database Engine      |                                │
+│  - Vector operations       │  - HNSW Index                  │
+│  - Similarity computation  │  - Flat index fallback         │
 ├─────────────────────────────────────────────────────────────┤
-│  Storage Layer (ReDB)                                       │
-│  - Persistent vectors      │  - Metadata storage           │
-│  - ACID transactions       │  - Backup/restore             │
+│  Storage Layer (ReDB)      |                                │
+│  - Persistent vectors      │  - Metadata storage            │
+│  - ACID transactions       │  - Backup/restore              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -157,43 +165,25 @@ cargo test -p skypier-core
 
 # Run with logging
 RUST_LOG=debug cargo test
+
+# Run only unit tests
+cargo test --bin skypier-vecdb
+
+# Run with coverage (requires cargo-tarpaulin)
+cargo tarpaulin --all-features --workspace
 ```
 
-### Performance Testing
+### Continuous Integration
 
-```bash
-# Build optimized version
-cargo build --release
+This project uses GitHub Actions for CI/CD:
 
-# Run with performance logging
-RUST_LOG=info ./target/release/skypier-vecdb
-```
+- **Test Suite**: Runs on every push and PR (stable, beta, nightly Rust)
+- **Code Coverage**: Generates coverage reports using cargo-tarpaulin
+- **Security Audit**: Runs cargo-audit to check for vulnerabilities
+- **Cross-platform Builds**: Tests on Linux, Windows, and macOS
+- **Documentation**: Auto-generates and deploys docs to GitHub Pages
+- **Release Automation**: Creates releases with binaries for multiple platforms
 
-## Comparison with Other Vector Databases
-
-| Feature | Traditional VecDB | SkyPier VecDB |
-|---------|------------------|---------------|
-| **Performance** | Variable | Excellent (Rust zero-cost abstractions) |
-| **Memory Safety** | Language dependent | Zero-cost, compile-time guaranteed |
-| **Networking** | Usually centralized | Decentralized P2P |
-| **Indexing** | External libraries | Native HNSW implementation |
-| **Storage** | Various backends | ReDB (native Rust, embedded) |
-| **Concurrency** | Limited | Async/await throughout |
-| **Deployment** | Complex dependencies | Single binary |
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with [libp2p](https://libp2p.io/) for decentralized networking
-- Uses [ReDB](https://github.com/cberner/redb) for embedded storage
+[![CI](https://github.com/smolgroot/skypier-vecdb/workflows/CI/badge.svg)](https://github.com/smolgroot/skypier-vecdb/actions)
+[![Coverage](https://codecov.io/gh/user/skypier-vecdb/branch/main/graph/badge.svg)](https://codecov.io/gh/user/skypier-vecdb)
+````

@@ -1,6 +1,6 @@
+use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use anyhow::{Result, anyhow};
 
 pub mod database;
 pub mod similarity;

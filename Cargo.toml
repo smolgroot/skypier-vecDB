@@ -57,6 +57,7 @@ skypier-index = { path = "crates/skypier-index" }
 axum-test = "15.0"
 tempfile = "3.8"
 tokio-test = "0.4"
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [features]
 default = ["embedded"]
@@ -66,3 +67,7 @@ faiss-backend = ["faiss"]
 [[bin]]
 name = "skypier-vecdb"
 path = "src/main.rs"
+
+[[bench]]
+name = "vector_operations"
+harness = false

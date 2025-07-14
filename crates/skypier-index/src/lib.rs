@@ -1,10 +1,10 @@
 use anyhow::Result;
 
-pub mod hnsw;
 pub mod flat;
+pub mod hnsw;
 
-pub use hnsw::HnswIndex;
 pub use flat::FlatIndex;
+pub use hnsw::HnswIndex;
 
 #[derive(Debug, Clone)]
 pub struct SearchResult {

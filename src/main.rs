@@ -54,7 +54,7 @@ async fn main() -> Result<()> {
 
     // Initialize the vector database
     let db = Arc::new(VectorDatabase::new("./data").await?);
-    
+
     // Initialize P2P networking
     let network_config = skypier_network::NetworkConfig {
         port: p2p_port.parse()?,

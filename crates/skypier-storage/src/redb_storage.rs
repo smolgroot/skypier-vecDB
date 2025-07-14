@@ -1,8 +1,8 @@
 use anyhow::Result;
-use redb::{Database, TableDefinition, ReadableTable, ReadableTableMetadata};
+use redb::{Database, ReadableTable, ReadableTableMetadata, TableDefinition};
 use serde_json;
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 use std::sync::Arc;
 use tokio::task;
 
@@ -48,7 +48,7 @@ impl Storage for RedbStorage {
     async fn store_vector(&self, vector: &Vector) -> Result<()> {
         let db = Arc::clone(&self.db);
         let vector = vector.clone();
-        
+
         task::spawn_blocking(move || {
             let write_txn = db.begin_write()?;
             {
@@ -58,7 +58,8 @@ impl Storage for RedbStorage {
             }
             write_txn.commit()?;
             Ok::<(), anyhow::Error>(())
-        }).await??;
+        })
+        .await??;
 
         Ok(())
     }
@@ -66,11 +67,11 @@ impl Storage for RedbStorage {
     async fn get_vector(&self, id: &str) -> Result<Option<Vector>> {
         let db = Arc::clone(&self.db);
         let id = id.to_string();
-        
+
         let result = task::spawn_blocking(move || {
             let read_txn = db.begin_read()?;
             let table = read_txn.open_table(VECTORS_TABLE)?;
-            
+
             match table.get(id.as_str())? {
                 Some(data) => {
                     let vector: Vector = serde_json::from_slice(data.value())?;
@@ -78,7 +79,8 @@ impl Storage for RedbStorage {
                 }
                 None => Ok::<Option<Vector>, anyhow::Error>(None),
             }
-        }).await??;
+        })
+        .await??;
 
         Ok(result)
     }
@@ -86,7 +88,7 @@ impl Storage for RedbStorage {
     async fn delete_vector(&self, id: &str) -> Result<bool> {
         let db = Arc::clone(&self.db);
         let id = id.to_string();
-        
+
         let result = task::spawn_blocking(move || {
             let write_txn = db.begin_write()?;
             let existed = {
@@ -96,19 +98,21 @@ impl Storage for RedbStorage {
             };
             write_txn.commit()?;
             Ok::<bool, anyhow::Error>(existed)
-        }).await??;
+        })
+        .await??;
 
         Ok(result)
     }
 
     async fn count_vectors(&self) -> Result<usize> {
         let db = Arc::clone(&self.db);
-        
+
         let count = task::spawn_blocking(move || {
             let read_txn = db.begin_read()?;
             let table = read_txn.open_table(VECTORS_TABLE)?;
             Ok::<usize, anyhow::Error>(table.len()? as usize)
-        }).await??;
+        })
+        .await??;
 
         Ok(count)
     }
@@ -130,26 +134,26 @@ impl Storage for RedbStorage {
     async fn backup(&self, backup_path: &str) -> Result<()> {
         let source_path = Path::new(&self.data_dir).join("vectors.redb");
         let backup_dir = Path::new(backup_path);
-        
+
         if !backup_dir.exists() {
             fs::create_dir_all(backup_dir)?;
         }
-        
+
         let backup_file = backup_dir.join("vectors.redb");
         fs::copy(source_path, backup_file)?;
-        
+
         Ok(())
     }
 
     async fn list_collections(&self) -> Result<Vec<String>> {
         let db = self.db.clone();
-        
+
         let collections = task::spawn_blocking(move || {
             let read_txn = db.begin_read()?;
             let table = read_txn.open_table(VECTORS_TABLE)?;
-            
+
             let mut collections = std::collections::HashSet::new();
-            
+
             for item in table.iter()? {
                 let (_, data) = item?;
                 let vector: Vector = serde_json::from_slice(data.value())?;
@@ -157,9 +161,10 @@ impl Storage for RedbStorage {
                     collections.insert(collection);
                 }
             }
-            
+
             Ok::<Vec<String>, anyhow::Error>(collections.into_iter().collect())
-        }).await??;
+        })
+        .await??;
 
         Ok(collections)
     }
@@ -167,13 +172,13 @@ impl Storage for RedbStorage {
     async fn get_vectors_in_collection(&self, collection: &str) -> Result<Vec<Vector>> {
         let db = self.db.clone();
         let collection = collection.to_string();
-        
+
         let vectors = task::spawn_blocking(move || {
             let read_txn = db.begin_read()?;
             let table = read_txn.open_table(VECTORS_TABLE)?;
-            
+
             let mut vectors = Vec::new();
-            
+
             for item in table.iter()? {
                 let (_, data) = item?;
                 let vector: Vector = serde_json::from_slice(data.value())?;
@@ -181,20 +186,21 @@ impl Storage for RedbStorage {
                     vectors.push(vector);
                 }
             }
-            
+
             Ok::<Vec<Vector>, anyhow::Error>(vectors)
-        }).await??;
+        })
+        .await??;
 
         Ok(vectors)
     }
 
     async fn get_first_vector(&self) -> Result<Option<Vector>> {
         let db = Arc::clone(&self.db);
-        
+
         let first_vector = task::spawn_blocking(move || {
             let read_txn = db.begin_read()?;
             let table = read_txn.open_table(VECTORS_TABLE)?;
-            
+
             let mut iter = table.iter()?;
             let result = if let Some(first) = iter.next() {
                 let (_, value) = first?;
@@ -205,7 +211,8 @@ impl Storage for RedbStorage {
                 None
             };
             Ok::<Option<Vector>, anyhow::Error>(result)
-        }).await??;
+        })
+        .await??;
 
         Ok(first_vector)
     }

@@ -12,7 +12,7 @@ pub struct P2PNode {
 impl P2PNode {
     pub async fn new(config: NetworkConfig) -> Result<Self> {
         info!("Starting P2P node on port {}", config.port);
-        
+
         Ok(Self {
             config,
             peers: HashMap::new(),
@@ -41,7 +41,8 @@ impl P2PNode {
 
     pub async fn connect_to_peer(&mut self, peer_addr: &str) -> Result<()> {
         info!("Connecting to peer: {}", peer_addr);
-        self.peers.insert(peer_addr.to_string(), "connected".to_string());
+        self.peers
+            .insert(peer_addr.to_string(), "connected".to_string());
         Ok(())
     }
 

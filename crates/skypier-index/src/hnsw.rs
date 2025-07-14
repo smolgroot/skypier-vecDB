@@ -1,8 +1,8 @@
-use anyhow::{Result, anyhow};
-use std::collections::{HashMap, BinaryHeap};
+use anyhow::{anyhow, Result};
 use std::cmp::Ordering;
+use std::collections::{BinaryHeap, HashMap};
 
-use crate::{VectorIndex, SearchResult};
+use crate::{SearchResult, VectorIndex};
 
 #[derive(Debug, Clone)]
 struct Connection {
@@ -27,7 +27,10 @@ impl PartialOrd for Connection {
 impl Ord for Connection {
     fn cmp(&self, other: &Self) -> Ordering {
         // Reverse ordering for min-heap behavior
-        other.distance.partial_cmp(&self.distance).unwrap_or(Ordering::Equal)
+        other
+            .distance
+            .partial_cmp(&self.distance)
+            .unwrap_or(Ordering::Equal)
     }
 }
 
@@ -55,7 +58,12 @@ impl HnswIndex {
         })
     }
 
-    fn search_layer(&self, query: &[f32], entry_points: Vec<String>, num_closest: usize) -> Vec<Connection> {
+    fn search_layer(
+        &self,
+        query: &[f32],
+        entry_points: Vec<String>,
+        num_closest: usize,
+    ) -> Vec<Connection> {
         let mut visited = std::collections::HashSet::new();
         let mut candidates = BinaryHeap::new();
         let mut w = BinaryHeap::new();
@@ -64,7 +72,10 @@ impl HnswIndex {
         for ep in entry_points {
             if let Some(node) = self.nodes.get(&ep) {
                 let distance = cosine_similarity(query, &node.vector);
-                let conn = Connection { id: ep.clone(), distance };
+                let conn = Connection {
+                    id: ep.clone(),
+                    distance,
+                };
                 candidates.push(conn.clone());
                 w.push(conn);
                 visited.insert(ep);
@@ -82,11 +93,14 @@ impl HnswIndex {
                 for neighbor_id in &node.connections {
                     if !visited.contains(neighbor_id) {
                         visited.insert(neighbor_id.clone());
-                        
+
                         if let Some(neighbor) = self.nodes.get(neighbor_id) {
                             let distance = cosine_similarity(query, &neighbor.vector);
-                            let conn = Connection { id: neighbor_id.clone(), distance };
-                            
+                            let conn = Connection {
+                                id: neighbor_id.clone(),
+                                distance,
+                            };
+
                             if w.len() < num_closest {
                                 candidates.push(conn.clone());
                                 w.push(conn);
@@ -127,7 +141,7 @@ impl VectorIndex for HnswIndex {
         // Search for closest nodes
         let entry_point = self.entry_point.as_ref().unwrap().clone();
         let candidates = self.search_layer(vector, vec![entry_point], self.ef_construction);
-        
+
         // Select M neighbors
         let mut selected = Vec::new();
         for candidate in candidates.into_iter().take(self.max_connections) {
@@ -137,7 +151,7 @@ impl VectorIndex for HnswIndex {
         // Add bidirectional connections
         let mut new_node = node;
         new_node.connections = selected.clone();
-        
+
         for neighbor_id in &selected {
             if let Some(neighbor) = self.nodes.get_mut(neighbor_id) {
                 neighbor.connections.push(id.to_string());
@@ -160,12 +174,12 @@ impl VectorIndex for HnswIndex {
                     neighbor.connections.retain(|conn_id| conn_id != id);
                 }
             }
-            
+
             // Update entry point if needed
             if self.entry_point.as_ref() == Some(&id.to_string()) {
                 self.entry_point = self.nodes.keys().next().cloned();
             }
-            
+
             Ok(true)
         } else {
             Ok(false)
@@ -175,7 +189,7 @@ impl VectorIndex for HnswIndex {
     fn search(&self, query: &[f32], k: usize) -> Result<Vec<SearchResult>> {
         if let Some(entry_point) = &self.entry_point {
             let connections = self.search_layer(query, vec![entry_point.clone()], k.max(50));
-            
+
             let results = connections
                 .into_iter()
                 .take(k)
@@ -184,7 +198,7 @@ impl VectorIndex for HnswIndex {
                     score: conn.distance, // Using cosine similarity
                 })
                 .collect();
-            
+
             Ok(results)
         } else {
             Ok(Vec::new())
